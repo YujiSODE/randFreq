@@ -7,14 +7,12 @@
 #	See LICENSE or http://opensource.org/licenses/mit-license.php
 ##===================================================================
 #Simple tool for estimating frequencies of random variables.
-#M-set numerical values: {{v11 v12 ... v1N} ... {vM1 ... vMN}}
-#available minimum dataset size (M) is 2
 #=== Synopsis ===
 #** Shell **
-#tclsh randFreq.tcl "X0" "X1" ?"Xn"?;
+#tclsh randFreq.tcl "X0" ?"X1" ? ... "Xn"??;
 #
-# - $X0 and $X1: lists of numerical values e.g., 0.5 0.2 1.0
-# - $Xn: an optional list of numerical values
+# - $X0: lists of numerical values e.g., 0.5 0.2 1.0
+# - $X1 to $Xn: optional lists of numerical values
 #--------------------------------------------------------------------
 #** Tcl **
 #1)
@@ -22,14 +20,12 @@
 #It returns estimated frequencies from given data set.
 #
 # - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
-#   available minimum dataset size M is 2
 #
 #2)
 #::randFreq::outputFreq values ?joinChar?;
 #It outputs estimated frequencies as utf-8 encoded text in the current directory.
 #
 # - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
-#   available minimum dataset size M is 2
 # - $joinChar: a join character; tab character is default value
 ##===================================================================
 set auto_noexec 1;
@@ -85,24 +81,25 @@ namespace eval ::randFreq {
 		set std 0.0;
 		#N is list size of given list
 		set N [llength $v];
-		#--- average ---
-		foreach e $v {
-			set avg [expr {$avg+$e}];
+		if {$N>1} {
+			#--- average ---
+			foreach e $v {
+				set avg [expr {$avg+$e}];
+			};
+			set avg [expr {$avg/$N}];
+			#--- standard deviation ---
+			foreach e $v {
+				set std [expr {$std+($e-$avg)**2}];
+			};
+			set std [expr {sqrt($std/($N-1))}];
+			return [list $name $avg $std];
+		} else {
+			return [list $name $v];
 		};
-		set avg [expr {$avg/$N}];
-		#--- standard deviation ---
-		foreach e $v {
-			set std [expr {$std+($e-$avg)**2}];
-		};
-		set std [expr {sqrt($std/($N-1))}];
-		return [list $name $avg $std];
 	};
 	#procedure that estimates frequencies from given data set
 	proc getFreq {values} {
 		# - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
-		#   available minimum dataset size M is 2
-#== To do ==
-#if {[llength $values]<1|| ...} {return -code error {dataset size is too small};};
 		puts stdout {Please input data range (minimum step maximum)?};
 		#range is data range
 		set range [gets stdin];
@@ -138,7 +135,6 @@ namespace eval ::randFreq {
 	#procedure that outputs result as utf-8 encoded text in the current directory
 	proc outputFreq {values {joinChar \t}} {
 		# - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
-		#   available minimum dataset size M is 2
 		# - $joinChar: a join character; tab character is default value
 		set R [::randFreq::getFreq $values];
 		set C [open "[clock seconds]dataFreq.txt" w];
@@ -153,6 +149,6 @@ namespace eval ::randFreq {
 #=== shell ===
 if {$argc>0} {
 	foreach e [::randFreq::getFreq $argv] {
-		puts stdout "$e\n";
+		puts stdout "[join $e ,]\n";
 	};
 };
