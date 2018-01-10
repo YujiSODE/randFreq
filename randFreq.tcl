@@ -11,8 +11,8 @@
 #** Shell **
 #tclsh randFreq.tcl "X0" ?"X1" ? ... "Xn"??;
 #
-# - $X0: lists of numerical values e.g., 0.5 0.2 1.0
-# - $X1 to $Xn: optional lists of numerical values
+# - X0: lists of numerical values e.g., 0.5 0.2 1.0
+# - X1 to Xn: optional lists of numerical values
 #--------------------------------------------------------------------
 #** Tcl **
 #1)
