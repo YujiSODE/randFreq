@@ -14,14 +14,12 @@ ______
 - `X1` to `Xn`: optional lists of numerical values
 
 **Tcl**  
-1\)  
-`::randFreq::getFreq values;`  
+1\) `::randFreq::getFreq values;`  
 It returns estimated frequencies from given data set.  
 
 - `$values`: a list of numerical lists e.g., `{{v11 v12 ... v1n} ... {vM1 ... vMm}}`
 
-2\)  
-`::randFreq::outputFreq values ?joinChar?;`  
+2\) `::randFreq::outputFreq values ?joinChar?;`  
 It outputs estimated frequencies as utf-8 encoded text in the current directory.  
 
 - `$values`: a list of numerical lists e.g., `{{v11 v12 ... v1n} ... {vM1 ... vMm}}`
