@@ -15,18 +15,24 @@
 # - X1 to Xn: optional lists of numerical values
 #--------------------------------------------------------------------
 #** Tcl **
-#1)
+#
 #::randFreq::getFreq values;
 #It returns estimated frequencies from given data set.
 #
 # - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
 #
-#2)
-#::randFreq::outputFreq values ?joinChar?;
+#::randFreq::outputFreq values ?Char?;
 #It outputs estimated frequencies as utf-8 encoded text in the current directory.
 #
 # - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
-# - $joinChar: a join character; tab character is default value
+# - $Char: a join character; tab character is default value
+#
+#::randFreq::loadFile filePath char ?encoding?;
+#It reads a given file and returns a list of numerical list
+#
+# - $filePath: filePath of a given file
+# - $char: a character used in order to split loaded data
+# - $encoding: an optional encoding of given file
 ##===================================================================
 set auto_noexec 1;
 package require Tcl 8.6;
@@ -133,9 +139,9 @@ namespace eval ::randFreq {
 		return $result;
 	};
 	#procedure that outputs result as utf-8 encoded text in the current directory
-	proc outputFreq {values {joinChar \t}} {
+	proc outputFreq {values {Char \t}} {
 		# - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
-		# - $joinChar: a join character; tab character is default value
+		# - $Char: a join character; tab character is default value
 		set R [::randFreq::getFreq $values];
 		set C [open "[clock seconds]dataFreq.txt" w];
 		fconfigure $C -encoding utf-8;
@@ -144,6 +150,27 @@ namespace eval ::randFreq {
 		};
 		puts stdout $R;
 		close $C;unset C R;
+	};
+	#procedure that reads a given file and returns a list of numerical list
+	proc loadFile {filePath char {encoding {}}} {
+		# - $filePath: filePath of a given file
+		# - $char: a character used in order to split loaded data
+		# - $encoding: an optional encoding of given file
+		set V {};
+		#rgEx is regular expression that matches real number
+		set rgEx {^(?:[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+(?:\.[0-9]+)?)?)$|^(?:\.[0-9]+)$};
+		set C [open $filePath r];
+		if {[llength $encoding]<1} {fconfigure $C -encoding $encoding;};
+		set lines [split [read -nonewline $C] \n];
+		close $C;
+		foreach l $lines {
+			#it adds only real numbers from split string
+			set x [lmap e [split $l $char] {if {![regexp $rgEx $e]} {continue;};list $e;}];
+			if {[llength $x]<1} {continue;};
+			lappend V $x;
+		};
+		unset C lines rgEx x;
+		return $V;
 	};
 };
 #=== shell ===
