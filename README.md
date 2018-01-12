@@ -18,10 +18,10 @@ ______
 It returns estimated frequencies from given data set.
 - `$values`: a list of numerical lists e.g., `{{v11 v12 ... v1n} ... {vM1 ... vMm}}`
 
-`::randFreq::outputFreq values ?joinChar?;`  
+`::randFreq::outputFreq values ?char?;`  
 It outputs estimated frequencies as utf-8 encoded text in the current directory.
 - `$values`: a list of numerical lists e.g., `{{v11 v12 ... v1n} ... {vM1 ... vMm}}`
-- `$joinChar`: a join character; tab character is default value
+- `$char`: a join character; tab character is default value
 
 `::randFreq::loadFile filePath char ?encoding?;`  
 It reads a given file and returns a list of numerical list.
