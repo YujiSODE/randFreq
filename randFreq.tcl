@@ -21,11 +21,11 @@
 #
 # - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
 #
-#::randFreq::outputFreq values ?Char?;
+#::randFreq::outputFreq values ?char?;
 #It outputs estimated frequencies as utf-8 encoded text in the current directory.
 #
 # - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
-# - $Char: a join character; tab character is default value
+# - $char: a join character; tab character is default value
 #
 #::randFreq::loadFile filePath char ?encoding?;
 #It reads a given file and returns a list of numerical list
@@ -139,14 +139,14 @@ namespace eval ::randFreq {
 		return $result;
 	};
 	#procedure that outputs result as utf-8 encoded text in the current directory
-	proc outputFreq {values {Char \t}} {
+	proc outputFreq {values {char \t}} {
 		# - $values: a list of numerical lists e.g., {{v11 v12 ... v1n} ... {vM1 ... vMm}}
-		# - $Char: a join character; tab character is default value
+		# - $char: a join character; tab character is default value
 		set R [::randFreq::getFreq $values];
 		set C [open "[clock seconds]dataFreq.txt" w];
 		fconfigure $C -encoding utf-8;
 		foreach e $R {
-			puts -nonewline $C "[join $e $joinChar]\n";
+			puts -nonewline $C "[join $e $char]\n";
 		};
 		puts stdout $R;
 		close $C;unset C R;
