@@ -160,7 +160,7 @@ namespace eval ::randFreq {
 		#rgEx is regular expression that matches real number
 		set rgEx {^(?:[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+(?:\.[0-9]+)?)?)$|^(?:\.[0-9]+)$};
 		set C [open $filePath r];
-		if {[llength $encoding]<1} {fconfigure $C -encoding $encoding;};
+		if {[llength $encoding]} {fconfigure $C -encoding $encoding;};
 		set lines [split [read -nonewline $C] \n];
 		close $C;
 		foreach l $lines {
