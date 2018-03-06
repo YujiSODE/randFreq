@@ -2,7 +2,7 @@
 Simple tool for estimating frequencies of random variables.  
 GitHub: https://github.com/YujiSODE/randFreq  
 Wiki: https://github.com/YujiSODE/randFreq/wiki  
->Copyright (c) 2017 Yuji SODE \<yuji.sode@gmail.com\>  
+>Copyright (c) 2018 Yuji SODE \<yuji.sode@gmail.com\>  
 >This software is released under the MIT License.  
 >See LICENSE or http://opensource.org/licenses/mit-license.php
 ______
